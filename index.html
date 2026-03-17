@@ -1,1 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariscos Las Glorias • Estilo Sinaloa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
 
+        :root {
+            --amarillo: #FFCC00;
+            --azul: #003D4D;
+            --azul-oscuro: #001f27;
+            --beige: #F8F1E9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            height: 100vh;
+            background: var(--azul-oscuro);
+        }
+
+        /* VIDEO DE FONDO (solo en home) */
+        #video-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            display: block;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(0, 61, 77, 0.45), rgba(0, 61, 77, 0.65));
+            z-index: -1;
+            display: block;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER (solo visible en home) */
+        header {
+            position: fixed;
+            top: 20px;
+            left: 0; right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 100;
+            transition: opacity 0.4s ease;
+        }
+
+        header.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .icon {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        .icon:hover {
+            transform: scale(1.12) rotate(6deg);
+            box-shadow: 0 12px 30px rgba(255, 204, 0, 0.5);
+        }
+
+        /* HOME */
+        #home {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 9vw, 4.5rem);
+            color: var(--amarillo);
+            text-shadow: 4px 4px 0 var(--azul), 0 0 30px rgba(255,204,0,0.7);
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .menu-3d {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(5rem, 15vw, 9rem);
+            font-weight: 700;
+            color: var(--amarillo);
+            text-shadow: 
+                10px 10px 0 var(--azul),
+                -5px -5px 0 var(--azul),
+                0 20px 40px rgba(0,61,77,0.9),
+                0 0 70px rgba(255,204,0,0.9);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 30px 0;
+            padding: 20px 50px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(8px);
+        }
+
+        .menu-3d:hover {
+            transform: scale(1.07) rotate(-2deg);
+            text-shadow: 14px 14px 0 var(--azul), -7px -7px 0 var(--azul), 0 30px 60px rgba(0,61,77,1);
+        }
+
+        .experiencia-btn {
+            margin-top: 50px;
+            padding: 16px 45px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: var(--amarillo);
+            color: var(--azul);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,204,0,0.6);
+            transition: all 0.35s;
+        }
+
+        .experiencia-btn:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(255,204,0,0.85);
+        }
+
+        /* MENU VIEW */
+        #menu-view {
+            display: none;
+            flex-direction: column;
+            padding: 90px 15px 40px;
+            background: var(--azul-oscuro);
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--amarillo);
+            cursor: pointer;
+            text-shadow: 
+                6px 6px 0 var(--azul),
+                -3px -3px 0 var(--azul),
+                0 10px 25px rgba(0,0,0,0.8);
+            transition: all 0.3s;
+            z-index: 100;
+            padding: 10px 20px;
+            border-radius: 16px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(6px);
+        }
+
+        .back-btn:hover {
+            transform: scale(1.25) translateX(-5px);
+            text-shadow: 8px 8px 0 var(--azul), -4px -4px 0 var(--azul), 0 15px 35px rgba(0,0,0,1);
+        }
+
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+            margin-top: 30px;
+        }
+
+        .menu-grid img {
+            width: 100%;
+            max-width: 580px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+            border: 6px solid rgba(248,241,233,0.15);
+        }
+
+        /* FOOTER (siempre visible) */
+        footer {
+            position: fixed;
+            bottom: 15px;
+            left: 0; right: 0;
+            text-align: center;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+            text-shadow: 2px 2px 5px #000;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            .menu-3d { font-size: clamp(4.2rem, 14vw, 6.5rem); padding: 15px 40px; }
+            .logo-text { font-size: clamp(2.4rem, 8vw, 3.8rem); }
+            .back-btn { font-size: 3rem; top: 15px; left: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fondo dinámico solo en home -->
+    <video id="video-bg" autoplay loop muted playsinline>
+        <source src="fondo.mp4" type="video/mp4">
+    </video>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="container">
+
+        <!-- Header solo en home -->
+        <header id="header">
+            <img src="ig.png" alt="Instagram" class="icon" onclick="openInstagram()">
+            <img src="whats.png" alt="WhatsApp" class="icon" onclick="openWhatsApp()">
+        </header>
+
+        <!-- Pantalla principal -->
+        <div id="home">
+            <div class="logo-text"></div>
+            <div class="menu-3d" onclick="showMenu()">MENU</div>
+            <button class="experiencia-btn" onclick="openReviews()">
+                CUÉNTANOS TU EXPERIENCIA
+            </button>
+        </div>
+
+        <!-- Pantalla de menú (fondo estático, sin header) -->
+        <div id="menu-view">
+            <div class="back-btn" onclick="hideMenu()">←</div>
+            
+            <div class="menu-grid">
+                <img src="menu1.jpeg" alt="Menú 1">
+                <img src="menu2.jpeg" alt="Menú 2">
+                <img src="menu3.jpeg" alt="Menú 3">
+            </div>
+        </div>
+
+        <footer>
+            ESTILO SINALOA<br>
+            ¡Pura Calidad!
+        </footer>
+    </div>
+
+    <script>
+        function showMenu() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('menu-view').style.display = 'flex';
+            document.getElementById('header').classList.add('hidden');
+            document.getElementById('video-bg').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function hideMenu() {
+            document.getElementById('menu-view').style.display = 'none';
+            document.getElementById('home').style.display = 'flex';
+            document.getElementById('header').classList.remove('hidden');
+            document.getElementById('video-bg').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function openInstagram() {
+            window.open('https://www.instagram.com/_lasgloriasmariscos?igsh=M2ZtajNwaDRub3dl', '_blank');
+        }
+
+        function openWhatsApp() {
+            window.open('https://wa.me/528719316525', '_blank');
+        }
+
+        function openReviews() {
+            window.open('https://maps.app.goo.gl/2b1vhEpcsYx6pLSC7', '_blank');
+        }
+
+        // ESC para regresar
+        document.addEventListener('keydown', e => {
+            if (e.key === "Escape" && document.getElementById('menu-view').style.display === 'flex') {
+                hideMenu();
+            }
+        });
+    </script>
+</body>
+</html>
